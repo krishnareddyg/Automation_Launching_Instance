@@ -1,0 +1,21 @@
+---
+- name: Make sure we have a 'techops_dba' group
+  group:
+    name: techops_dba
+    state: present
+
+- name: Allow 'techops_dba' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%techops_dba'
+    line: '%techops_dba ALL=(ALL) NOPASSWD: ALL'
+
+- name: Add sudoers users to techops_dba group
+  user: name=instance1 groups=techops_dba append=yes state=present createhome=yes
+
+
+- name: Set up authorized keys for the instance1 user
+  authorized_key: user=instance1 key="{{item}}"
+  with_file:
+    - /home/railsdev/.ssh/id_rsa.pub
