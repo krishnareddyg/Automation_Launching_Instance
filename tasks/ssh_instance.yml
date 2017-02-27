@@ -1,0 +1,14 @@
+---
+
+- name: Wait for SSH on the Instance
+    command: >
+      ssh -oBatchMode=yes -oStrictHostKeyChecking=no
+      cirros@{{instance1.server.public_v4}} true
+    register: result
+    until: result|success
+    retries: 30
+    delay: 10
+
+  - name: Add Cirros Instance to Inventory
+    add_host: name=instance1 groups=webservers
+              ansible_ssh_host={{ instance1.server.public_v4 }}
