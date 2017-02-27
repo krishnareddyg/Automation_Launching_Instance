@@ -1,0 +1,35 @@
+---
+
+   - name: Create Private Network
+     os_network:
+       state: present
+       name: privatenet
+       external: False
+       shared: False
+       #provider_network_type: vlan
+       #provider_physical_network: datacentre
+     register: privatenet_network
+
+   - name: Create the subnet
+     os_subnet:
+       state: present
+       network_name: "{{ privatenet_network.id }}"
+       name: testnet_sub
+       ip_version: 4
+       cidr: 192.168.0.0/24
+       gateway_ip: 192.168.0.1
+       enable_dhcp: yes
+       dns_nameservers:
+         - 8.8.8.8
+     register: testnet_sub
+
+   - name: Create the Router
+     ignore_errors: yes
+     os_router:
+       state: present
+       name: testnet_router
+       network: nova
+       external_fixed_ips:
+         - subnet: nova
+       interfaces:
+         - testnet_sub
