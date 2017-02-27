@@ -1,0 +1,7 @@
+---
+
+- name: Create new keypair from current user's default SSH key
+     os_keypair:
+       state: present
+       name: ansible_key
+       public_key_file: "{{ '~' | expanduser }}/.ssh/id_rsa.pub"
