@@ -1,0 +1,17 @@
+---
+
+- name: Lanuch cirros Instance on openstack Platform
+   hosts: localhost
+   tasks:
+   
+   - name: Download Cirros image
+     get_url:
+         url: http://download.cirros-cloud.net/0.3.4/cirros-3.3.4-x86_64-disk.img
+         dest: /tmp/cirros-0.3.4-x86_64-disk.img
+
+   - name: Upload cirros image to host
+     os_image:
+       name: cirros
+       disk_format: qcow2
+       state: present
+       filename: /tmp/cirros-0.3.4-x86_64-disk.img
