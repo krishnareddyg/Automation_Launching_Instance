@@ -4,6 +4,10 @@
     name: techops_dba
     state: present
 
+- name:       Edit the /etc/security/access.conf to add "techops_dba" group
+  lineinfile: dest=/etc/security/access.conf line="techops_dba:ALL" state=present
+  run_once:   true
+
 - name: Allow 'techops_dba' group to have passwordless sudo
   lineinfile:
     dest: /etc/sudoers
