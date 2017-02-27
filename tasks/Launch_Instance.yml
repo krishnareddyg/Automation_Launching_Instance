@@ -1,0 +1,13 @@
+---
+
+   - name: Launch an instance
+     os_server:
+       state: present
+       name: Instance1
+       image: cirros
+       flavor: m1.tiny
+       security_groups: sg
+       key_name: ansible_key
+       nics:
+        - net-id: "{{ privatenet_network.id }}"
+     register: instance1
